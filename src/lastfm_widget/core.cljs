@@ -1,6 +1,9 @@
 (ns ^:figwheel-always lastfm-widget.core
+    (:require-macros
+     [cljs.core.async.macros :as m :refer [go]])
     (:require [om.core :as om :include-macros true]
               [om.dom :as dom :include-macros true]
+              [cljs.core.async :refer [chan close!]]
               [ajax.core :refer [GET POST]]))
 
 (enable-console-print!)
@@ -13,9 +16,11 @@
                           :error-api nil
                           :error nil}))
 
+
 (def ^:private api-url "http://ws.audioscrobbler.com/2.0/")
 (def ^:private api-key "7125d4e86e20b283e109669693c4465d")
 (def ^:private api-format "json")
+
 
 (defn GET-params
   ([method]
@@ -46,21 +51,46 @@
         :keywords? (= api-format "json")
         :handler handler
         :error-handler error-handler)))
-;; usage:
-;; (getRecentTracks "robal_pro"
-;;                  (make-handler :tracks app-state [:recenttracks :track])
-;;                  (make-handler :error-api app-state) 40)
+
+
+(defn timeout [ms]
+  (let [c (chan)]
+    (js/setTimeout (fn [] (close! c)) ms)
+    c))
 
 
 (defn get-plaing-now [tracks]
   (first (filter :nowplaying tracks)))
 
 
+(defn track-view [track owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+      (dom/li nil
+              (:name track)))))
+
+
+(defn lastfm-widget-view [data owner]
+  (reify
+    om/IWillMount
+    (will-mount [_]
+      (.log js/console _)
+      (go
+        (loop []
+          (getRecentTracks "robal_pro"
+                           (make-handler :tracks app-state [:recenttracks :track])
+                           (make-handler :error-api app-state) 10)
+          (<! (timeout 5000))
+          (recur))))
+    om/IRenderState
+    (render-state [this state]
+      (apply dom/div nil
+             (om/build-all track-view (:tracks data))))))
+
+
 (om/root
-  (fn [data owner]
-    (reify om/IRender
-      (render [_]
-        (dom/h1 nil (:text data)))))
+  lastfm-widget-view
   app-state
   {:target (. js/document (getElementById "app"))})
 
