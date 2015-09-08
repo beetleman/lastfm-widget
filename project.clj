@@ -31,7 +31,7 @@
                                    :source-map-timestamp true }}
                        {:id "min"
                         :source-paths ["src"]
-                        :compiler {:output-to "resources/public/js/compiled/lastfm_widget.js"
+                        :compiler {:output-to "resources/public/js/compiled/lastfm_widget.min.js"
                                    :main lastfm-widget.core
                                    :optimizations :advanced
                                    :pretty-print false}}]}
