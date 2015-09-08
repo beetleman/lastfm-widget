@@ -59,13 +59,13 @@
     c))
 
 
-(defn get-plaing-now [tracks]
-  (first (filter :nowplaying tracks)))
+(defn plaing-now? [track]
+  (:nowplaying track))
 
 
-
-(defn get-title [{:keys [name]}]
-  (dom/div #js {:className "title"}
+(defn get-title [{:keys [name url]}]
+  (dom/a #js {:className "title"
+              :href url}
             name))
 
 
@@ -76,15 +76,29 @@
 
 (defn get-artist [{:keys [artist]}]
   (dom/div #js {:className "artist"}
-            (:#text artist)))
+           (:#text artist)))
+
+
+(defn get-album-cover-url [{:keys [image]} size]
+  (some (fn [x]
+          (if (= (:size x) size) (:#text x)))
+        image))
+
+
+(defn get-album-cover [{:keys [album] :as track}]
+  (dom/img #js {:className "cover"
+                :src (get-album-cover-url track "medium")}))
 
 
 (defn track-view [track owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (apply dom/li #js {:className "track"}
-              (map #(% track) [get-artist get-title get-album])))))
+      (apply dom/li #js {:className (if (plaing-now? track)
+                                      "track plaing-now"
+                                      "track")}
+             (map #(% track)
+                  [get-album-cover get-artist get-title get-album])))))
 
 
 (defn lastfm-widget-view [data owner]
