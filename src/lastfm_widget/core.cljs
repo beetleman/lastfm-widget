@@ -8,14 +8,6 @@
 
 (enable-console-print!)
 
-(println "Edits to this text should show up in your developer console.")
-
-;; define your app data so that it doesn't get over-written on reload
-(defonce app-state (atom {:text "Hello world!"
-                          :tracks []
-                          :error-api nil
-                          :error nil}))
-
 
 (def ^:private api-url "http://ws.audioscrobbler.com/2.0/")
 (def ^:private api-key "7125d4e86e20b283e109669693c4465d")
@@ -101,31 +93,34 @@
                   [get-album-cover get-artist get-title get-album])))))
 
 
-(defn lastfm-widget-view [data owner]
-  (reify
-    om/IWillMount
-    (will-mount [_]
-      (.log js/console _)
-      (go
-        (loop []
-          (getRecentTracks "robal_pro"
-                           (make-handler :tracks app-state [:recenttracks :track])
-                           (make-handler :error-api app-state) 10)
-          (<! (timeout 5000))
-          (recur))))
-    om/IRenderState
-    (render-state [this state]
-      (apply dom/ul #js {:className "tracks"}
-             (om/build-all track-view (:tracks data))))))
+(defn create-lastfm-widget-view [user_name track_number app-state]
+  (fn [data owner]
+    (reify
+      om/IWillMount
+      (will-mount [_]
+        (go
+          (loop []
+            (getRecentTracks user_name
+                             (make-handler :tracks app-state [:recenttracks :track])
+                             (make-handler :error-api app-state)
+                             track_number)
+            (<! (timeout 5000))
+            (recur))))
+      om/IRenderState
+      (render-state [this state]
+        (apply dom/ul #js {:className "tracks"}
+               (om/build-all track-view (:tracks data))))))
+)
 
 
-(om/root
-  lastfm-widget-view
-  app-state
-  {:target (. js/document (getElementById "app"))})
-
-(defn yooo [a]
-  (println a))
+(defn create [user_name track_number id]
+  (let [app-state (atom {:tracks []
+                 :error-api nil
+                 :error nil})]
+    (om/root
+     (create-lastfm-widget-view user_name track_number app-state)
+     app-state
+     {:target (. js/document (getElementById id))})))
 
 
 (defn on-js-reload []
