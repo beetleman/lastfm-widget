@@ -63,12 +63,28 @@
   (first (filter :nowplaying tracks)))
 
 
+
+(defn get-title [{:keys [name]}]
+  (dom/div #js {:className "title"}
+            name))
+
+
+(defn get-album [{:keys [album]}]
+  (dom/div #js {:className "album"}
+            (:#text album)))
+
+
+(defn get-artist [{:keys [artist]}]
+  (dom/div #js {:className "artist"}
+            (:#text artist)))
+
+
 (defn track-view [track owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/li nil
-              (:name track)))))
+      (apply dom/li #js {:className "track"}
+              (map #(% track) [get-artist get-title get-album])))))
 
 
 (defn lastfm-widget-view [data owner]
@@ -85,7 +101,7 @@
           (recur))))
     om/IRenderState
     (render-state [this state]
-      (apply dom/div nil
+      (apply dom/ul #js {:className "tracks"}
              (om/build-all track-view (:tracks data))))))
 
 
@@ -93,6 +109,9 @@
   lastfm-widget-view
   app-state
   {:target (. js/document (getElementById "app"))})
+
+(defn yooo [a]
+  (println a))
 
 
 (defn on-js-reload []
