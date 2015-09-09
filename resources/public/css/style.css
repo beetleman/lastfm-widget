@@ -1,2 +1,7 @@
 /* some style */
-
+.track.plaing-now {
+  background-color: green;
+}
+.track {
+  background-color: grey;
+}

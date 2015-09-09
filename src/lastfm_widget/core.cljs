@@ -52,7 +52,7 @@
 
 
 (defn plaing-now? [track]
-  (:nowplaying track))
+  (get-in track [(keyword "@attr") :nowplaying]))
 
 
 (defn get-title [{:keys [name url]}]
