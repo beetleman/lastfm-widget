@@ -95,7 +95,7 @@
                                       "track plaing-now"
                                       "track")}
              (map #(% track)
-                  [get-album-cover get-artist get-title get-album])))))
+                  [get-album-cover get-title get-artist get-album])))))
 
 
 (defn create-lastfm-widget-view [user_name track_number app-state]
