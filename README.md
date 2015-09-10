@@ -12,6 +12,6 @@ and open your browser at [localhost:3449](http://localhost:3449/).
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 beetleman (Mateusz Pro.)
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
