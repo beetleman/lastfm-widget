@@ -12,6 +12,7 @@
 (def ^:private api-url "http://ws.audioscrobbler.com/2.0/")
 (def ^:private api-key "7125d4e86e20b283e109669693c4465d")
 (def ^:private api-format "json")
+(def ^:private default-album-cover-url "img/cover.png")
 
 
 (defn GET-params
@@ -72,9 +73,13 @@
 
 
 (defn get-album-cover-url [{:keys [image]} size]
-  (some (fn [x]
-          (if (= (:size x) size) (:#text x)))
-        image))
+  (let [url (some (fn [x]
+                    (if (= (:size x) size) (:#text x)))
+                  image)]
+    (.log js/console url)
+    (if (-> url count zero?)
+      default-album-cover-url
+      url)))
 
 
 (defn get-album-cover [{:keys [album] :as track}]

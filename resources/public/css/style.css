@@ -1,7 +1,32 @@
 /* some style */
-.track.plaing-now {
+ul.tracks li.track.plaing-now {
   background-color: green;
 }
-.track {
+ul.tracks li.track {
   background-color: grey;
+}
+
+
+ul.tracks {
+  list-style-type: none;
+  width: 500px;
+}
+
+ul.tracks li.track h3 {
+  font: bold;
+}
+
+ul.tracks li.track img {
+  float: left;
+  margin: 0 15px 0 0;
+}
+
+
+ul.tracks li.track {
+  padding: 10px;
+  overflow: auto;
+}
+
+ul.tracks li.track:hover {
+  background: #eee;
 }
