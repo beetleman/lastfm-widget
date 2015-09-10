@@ -76,7 +76,6 @@
   (let [url (some (fn [x]
                     (if (= (:size x) size) (:#text x)))
                   image)]
-    (.log js/console url)
     (if (-> url count zero?)
       default-album-cover-url
       url)))
