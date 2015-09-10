@@ -1,6 +1,6 @@
 (defproject lastfm-widget "0.1.0"
   :description "Simple last.fm widget"
-  :url "http://example.com/FIXME"
+  :url "https://github.com/beetleman/lastfm-widget"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
