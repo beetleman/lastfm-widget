@@ -128,7 +128,7 @@
                  (om/build-all track-view (:tracks data))))))))
 
 
-(defn create [user_name track_number id]
+(defn ^:export create [user_name track_number id]
   (let [app-state (atom {:tracks []
                  :error-api nil
                  :error nil})]
