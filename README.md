@@ -10,6 +10,8 @@ To get an interactive development environment run:
 
 and open your browser at [localhost:3449](http://localhost:3449/).
 
+To get working example open your browser at [demo](http://rawgit.com/beetleman/lastfm-widget/master/resources/public/example.html).
+
 ## Example
 
 Open resources/public/example.html in any browser.
