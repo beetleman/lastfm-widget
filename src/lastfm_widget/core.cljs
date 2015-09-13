@@ -117,7 +117,6 @@
             (recur))))
       om/IRenderState
       (render-state [this state]
-        (println data)
         (cond
           (:error-api data)
           (get-error-message (get-in data [:error-api :message]))
