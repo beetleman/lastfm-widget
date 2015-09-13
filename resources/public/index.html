@@ -6,13 +6,30 @@
         <link href="css/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <div id="app1"></div>
-        <hr />
-        <div id="app2"></div>
+        <h1>Usage:</h1>
+        <section>
+            <h2>Working example:</h2>
+            <h3>code:</h3>
+            <pre><code>
+lastfm_widget.core.create("robal_pro", 5, "app1");
+            </code></pre>
+            <h3>app:</h3>
+            <div id="app1"></div>
+        </section>
+
+        <section>
+            <h2>Bad user name:</h2>
+            <h3>code:</h3>
+            <pre><code>
+lastfm_widget.core.create("evil_twin_robal_pro", 2, "app2");
+            </code></pre>
+            <h3>app:</h3>
+            <div id="app2"></div>
+        </section>
         <script src="js/compiled/lastfm_widget.js" type="text/javascript"></script>
         <script type="text/javascript">
          lastfm_widget.core.create("robal_pro", 5, "app1");
-         lastfm_widget.core.create("robal_pro", 2, "app2");
+         lastfm_widget.core.create("evil_twin_robal_pro", 2, "app2");
         </script>
     </body>
 </html>
