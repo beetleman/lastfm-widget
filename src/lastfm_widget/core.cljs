@@ -28,7 +28,7 @@
    (fn [response]
      (let [response-error (if (:error response) response nil)
            response (get-in response get-in-path)]
-       (swap! dest assoc :api_error response-error)
+       (swap! dest assoc :error-api response-error)
        (if response
          (swap! dest assoc dest-key response))))))
 
@@ -85,6 +85,10 @@
   (dom/img #js {:className "cover"
                 :src (get-album-cover-url track "medium")}))
 
+(defn get-error-message [error]
+  (dom/div #js {:className "error"}
+           (str "Error: " error)))
+
 
 (defn track-view [track owner]
   (reify
@@ -104,17 +108,24 @@
       (will-mount [_]
         (go
           (loop []
-            (getRecentTracks user_name
-                             (make-handler :tracks app-state [:recenttracks :track])
-                             (make-handler :error-api app-state)
-                             track_number)
+            (getRecentTracks
+             user_name
+             (make-handler :tracks app-state [:recenttracks :track])
+             (make-handler :error app-state)
+             track_number)
             (<! (timeout 5000))
             (recur))))
       om/IRenderState
       (render-state [this state]
-        (apply dom/ul #js {:className "tracks"}
-               (om/build-all track-view (:tracks data))))))
-)
+        (println data)
+        (cond
+          (:error-api data)
+          (get-error-message (get-in data [:error-api :message]))
+          (:error data)
+          (get-error-message "Connection problem")
+          :else
+          (apply dom/ul #js {:className "tracks"}
+                 (om/build-all track-view (:tracks data))))))))
 
 
 (defn create [user_name track_number id]
