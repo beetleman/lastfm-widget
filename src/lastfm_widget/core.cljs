@@ -9,7 +9,7 @@
 (enable-console-print!)
 
 
-(def ^:private api-url "http://ws.audioscrobbler.com/2.0/")
+(def ^:private api-url "//ws.audioscrobbler.com/2.0/")
 (def ^:private api-key "7125d4e86e20b283e109669693c4465d")
 (def ^:private api-format "json")
 (def ^:private default-album-cover-url "img/cover.png")
